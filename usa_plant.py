@@ -1,5 +1,5 @@
 # Global Variables
-global entity_mode
+global entity
 global watering
 
 # Local Variables
@@ -9,38 +9,41 @@ water_delta = water_ground_max - water_bucket_max
 
 import(util)
 
-def set_entity_mode(_entity_mode):
- global entity_mode
- entity_mode = _entity_mode
+def set_entity(_entity):
+ global entity
+ entity = _entity
 
 def set_watring(_watering):
  global watering
  watering = _watering
 
 def invoke():
- global entity_mode
+ global entity
  global watering
- 
- if entity_mode == Entities.Tree:
+
+ if entity == Entities.Tree:
   plant_chessboard(Entities.Tree, Entities.Bush)
- 
- elif entity_mode == Entities.Carrot:
+
+ elif entity == Entities.Carrot:
   plant_chessboard(Entities.Carrot, Entities.Tree)
- 
- elif entity_mode == Entities.Pumpkin:
+
+ elif entity == Entities.Pumpkin:
   plant_with_till(Entities.Pumpkin)
- 
- elif entity_mode == Entities.Grass:
-  plant_with_till(entity_mode)
+  
+ elif entity == Entities.Sunflower:
+  plant_with_till(Entities.Sunflower)
+
+ elif entity == Entities.Grass:
+  plant_with_till(entity)
 
  else:
-  print("Warning: Unsupported `entity_mode`")
- 
+  print("Warning: Unsupported `entity`")
+
  if watering and get_water() < water_delta:
   use_item(Items.Water)
 
 def till_for(entity):
- if util.includes(entity, [Entities.Carrot, Entities.Pumpkin]):
+ if util.includes(entity, [Entities.Carrot, Entities.Pumpkin, Entities.Sunflower]):
   if get_ground_type() == Grounds.Grassland:
    till()
  elif get_ground_type() == Grounds.Soil:
