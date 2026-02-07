@@ -9,28 +9,27 @@ usa_plant.set_watring(params.watering)
 usa_harvest.set_watring(params.watering)
 
 while True:
- def was_reset(usa_move_result):
-  return usa_move_result[1] < 0
- 
  if len(params.entity_sequence) != len(params.scaling_sequence):
   print("Error: dirrerent size of `params.entity_sequence` and `params.scaling_sequence`.")
   break
 
  for entity_sequence_index in range(len(params.entity_sequence)):
   # 初期化
-  clear()
+  # clear()
+  usa_move.init(params.scaling_sequence[entity_sequence_index])
   current_entity = params.entity_sequence[entity_sequence_index]
   usa_plant.set_entity(current_entity)
   usa_harvest.set_entity(current_entity)
   current_scaling = params.scaling_sequence[entity_sequence_index]
-  usa_move.set_scaling(current_scaling)
   
   # 植える部
   harvest_candidates = []
   def plant_with_move():
    usa_plant.invoke()
+   
    harvest_candidates.append(util.get_pos())
-   return was_reset(usa_move.next())
+   usa_move.next()
+   return get_pos_y() == 0 and get_pos_x() == usa_move.get_scaled_size_x() // 2 - 1
   util.until(plant_with_move)
 
   # 刈る部
