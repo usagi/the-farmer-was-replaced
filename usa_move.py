@@ -1,4 +1,18 @@
 import(env)
+global scaling
+scaling = 1.0
+
+def set_scaling(_scaling):
+ global scaling
+ scaling = _scaling
+
+def get_scaled_size_y():
+ global scaling
+ return scaling * env.size_y
+
+def get_scaled_size_x():
+ global scaling
+ return scaling * env.size_x
 
 def x(distance):
  if (distance > 0):
@@ -33,7 +47,7 @@ def reset():
 def next(skip = 0):
  distance = skip + 1
  current = get_pos_y()
- if current + distance < env.size_y:
+ if current + distance < get_scaled_size_y():
   y(distance)
   return [current + distance, 0]
  else:
@@ -43,7 +57,7 @@ def next_line(skip = 0):
  dy = reset_y()
  distance = skip + 1
  current = get_pos_x()
- if current + distance < env.size_x:
+ if current + distance < get_scaled_size_x():
   x(distance)
   return [dy, current + distance]
  else:
@@ -55,4 +69,4 @@ def to(_y, _x):
  x(_x - get_pos_x())
 
 def end():
- to(env.size_y - 1, env.size_x - 1)
+ to(get_scaled_size_y() - 1, get_scaled_size_x() - 1)
