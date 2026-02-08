@@ -23,23 +23,36 @@ while True:
   current_scaling = params.scaling_sequence[entity_sequence_index]
   
   # 植える部
-  harvest_candidates = []
+  # bucket sort without dictionary indexing cost
+  # [ [priority=15], [priority=14], [priority=13], .. [priority=7] ]
+  harvest_candidates = [ [], [], [], [], [], [], [], [], [] ]
+  harvest_candidates_index_offset = 7
+  harvest_candidates_index_top = 15
   def plant_with_move():
    usa_plant.invoke()
-   
-   harvest_candidates.append(util.get_pos())
+   if get_entity_type() == Entities.Sunflower:
+    priority = measure()
+   else:
+    priority = harvest_candidates_index_top
+   index = harvest_candidates_index_top - priority 
+   harvest_candidates[index].append(util.get_pos())
    usa_move.next()
    return get_pos_y() == 0 and get_pos_x() == usa_move.get_scaled_size_x() // 2 - 1
   util.until(plant_with_move)
 
   # 刈る部
-  while len(harvest_candidates) > 0:
-   harvest_retries = []
-   for index in range(len(harvest_candidates)):
-    pos = harvest_candidates[index]
-    usa_move.to(pos[0], pos[1])
-    is_final_one = index == len(harvest_candidates) - 1
-    is_final_one = is_final_one and len(harvest_retries) == 0
-    if not usa_harvest.invoke(not is_final_one):
-     harvest_retries.append(util.get_pos())
+  while not util.empty_all(harvest_candidates):
+   harvest_retries = [ [], [], [], [], [], [], [], [], [] ]
+   num_planed = util.sum_all(harvest_candidates)
+   for prioritied_candidates in harvest_candidates:
+    for pos in prioritied_candidates:
+     usa_move.to(pos[0], pos[1])
+     entity_is_pumpkin = get_entity_type() == Entities.Pumpkin
+     only_simulate = False
+     x = measure()
+     if entity_is_pumpkin and num_planed > 1:
+      only_simulate = True
+     harvested = usa_harvest.invoke(only_simulate)
+     if entity_is_pumpkin and not harvested:
+      harvest_retries[0].append(util.get_pos())
    harvest_candidates = harvest_retries

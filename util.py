@@ -1,3 +1,15 @@
+def sum_all(list):
+ count = 0
+ for list_in_list in list:
+  count = count + len(list_in_list)
+ return count
+
+def empty_all(list):
+ for list_in_list in list:
+  if len(list_in_list) > 0:
+   return False
+ return True
+
 def includes(item, list):
  for _item in list:
   if _item == item:
