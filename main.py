@@ -16,12 +16,16 @@ while True:
  for entity_sequence_index in range(len(params.entity_sequence)):
   # 初期化
   # clear()
-  usa_move.init(params.scaling_sequence[entity_sequence_index])
   current_entity = params.entity_sequence[entity_sequence_index]
   usa_plant.set_entity(current_entity)
   usa_harvest.set_entity(current_entity)
   current_scaling = params.scaling_sequence[entity_sequence_index]
-  
+  if current_entity == Entities.Grass:
+   clear()  
+  if current_scaling * get_world_size() < 1:
+   continue
+  usa_move.init(params.scaling_sequence[entity_sequence_index])
+       
   # 植える部
   # bucket sort without dictionary indexing cost
   # [ [priority=15], [priority=14], [priority=13], .. [priority=7] ]
@@ -38,21 +42,22 @@ while True:
    harvest_candidates[index].append(util.get_pos())
    usa_move.next()
    return get_pos_y() == 0 and get_pos_x() == usa_move.get_scaled_size_x() // 2 - 1
+  if current_entity == Entities.Grass:
+   clear()
   util.until(plant_with_move)
 
   # 刈る部
+  num_harvest_required = util.len_all(harvest_candidates)
   while not util.empty_all(harvest_candidates):
    harvest_retries = [ [], [], [], [], [], [], [], [], [] ]
-   num_planed = util.sum_all(harvest_candidates)
    for prioritied_candidates in harvest_candidates:
     for pos in prioritied_candidates:
      usa_move.to(pos[0], pos[1])
-     entity_is_pumpkin = get_entity_type() == Entities.Pumpkin
-     only_simulate = False
-     x = measure()
-     if entity_is_pumpkin and num_planed > 1:
-      only_simulate = True
-     harvested = usa_harvest.invoke(only_simulate)
-     if entity_is_pumpkin and not harvested:
+     only_simulate = current_entity == Entities.Pumpkin and num_harvest_required > 1
+     #if not only_simulate and current_entity == Entities.Pumpkin:
+     # do_a_flip()
+     if usa_harvest.invoke(only_simulate):
+      num_harvest_required = num_harvest_required - 1
+     else:
       harvest_retries[0].append(util.get_pos())
    harvest_candidates = harvest_retries

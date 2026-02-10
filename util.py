@@ -1,8 +1,8 @@
-def sum_all(list):
- count = 0
+def len_all(list):
+ _len = 0
  for list_in_list in list:
-  count = count + len(list_in_list)
- return count
+  _len = _len + len(list_in_list)
+ return _len
 
 def empty_all(list):
  for list_in_list in list:

@@ -25,7 +25,8 @@ def invoke():
   plant_chessboard(Entities.Tree, Entities.Bush)
 
  elif entity == Entities.Carrot:
-  plant_chessboard(Entities.Carrot, Entities.Tree)
+  plant_with_till(Entities.Carrot)
+  #plant_chessboard(Entities.Carrot, Entities.Tree)
 
  elif entity == Entities.Pumpkin:
   plant_with_till(Entities.Pumpkin)
@@ -34,7 +35,9 @@ def invoke():
   plant_with_till(Entities.Sunflower)
 
  elif entity == Entities.Grass:
-  plant_with_till(entity)
+  if get_entity_type() != Entities.Grass:
+    plant_with_till(entity)
+  harvest()
 
  else:
   print("Warning: Unsupported `entity`")
