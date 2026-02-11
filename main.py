@@ -5,27 +5,24 @@ import(usa_plant)
 import(usa_harvest)
 import(usa_move)
 
-usa_plant.set_watring(params.watering)
-usa_harvest.set_watring(params.watering)
-
 while True:
- if len(params.entity_sequence) != len(params.scaling_sequence):
-  print("Error: dirrerent size of `params.entity_sequence` and `params.scaling_sequence`.")
-  break
-
- for entity_sequence_index in range(len(params.entity_sequence)):
+ for sequence_index in range(len(params.sequence)):
   # 初期化
   # clear()
-  current_entity = params.entity_sequence[entity_sequence_index]
+  current_sequence = params.sequence[sequence_index]
+  current_entity = current_sequence[params.SEQUENCE_INDEX_ENTITY]
   usa_plant.set_entity(current_entity)
+  usa_plant.set_watring(current_sequence[params.SEQUENCE_INDEX_WATER])
+  usa_plant.set_fertilizer(current_sequence[params.SEQUENCE_INDEX_FERTILIZER])
   usa_harvest.set_entity(current_entity)
-  current_scaling = params.scaling_sequence[entity_sequence_index]
+  usa_harvest.set_watring(current_sequence[params.SEQUENCE_INDEX_WATER])
+  current_size = current_sequence[params.SEQUENCE_INDEX_SIZE]
   if current_entity == Entities.Grass:
-   clear()  
-  if current_scaling * get_world_size() < 1:
+   clear()
+  if current_size < 1:
    continue
-  usa_move.init(params.scaling_sequence[entity_sequence_index])
-       
+  usa_move.init(current_sequence[params.SEQUENCE_INDEX_SIZE])
+
   # 植える部
   # bucket sort without dictionary indexing cost
   # [ [priority=15], [priority=14], [priority=13], .. [priority=7] ]
@@ -38,7 +35,7 @@ while True:
     priority = measure()
    else:
     priority = harvest_candidates_index_top
-   index = harvest_candidates_index_top - priority 
+   index = harvest_candidates_index_top - priority
    harvest_candidates[index].append(util.get_pos())
    usa_move.next()
    return get_pos_y() == 0 and get_pos_x() == usa_move.get_scaled_size_x() // 2 - 1

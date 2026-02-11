@@ -3,7 +3,6 @@ global watering
 
 import(env)
 import(util)
-import(usa_move)
 
 def set_entity(_entity):
  global entity
@@ -28,8 +27,10 @@ def invoke(only_simulate = False):
    harvest()
   return True
 
- # かぼちゃではない場合
+ # その他の場合
  else:
-  util.until_with(can_harvest, do_a_flip)
+  def _():
+   return can_harvest() or get_entity_type() == None
+  util.until_with(_, do_a_flip)
   harvest()
   return True

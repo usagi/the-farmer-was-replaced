@@ -1,27 +1,19 @@
 import(env)
-global scaling
+global size
 global next_is_east
-scaling = 1.0
+size = 1.0
 next_dx= -1
 
-def set_scaling(_scaling):
- global scaling
- scaling = _scaling
+def set_size(_size):
+ global size
+ size = _size
 
-def get_scaled_size_y():
- global scaling
- return scaling * env.size_y
-
-def get_scaled_size_x():
- global scaling
- return scaling * env.size_x
-
-def init(_scaling = 1.0):
- set_scaling(_scaling)
+def init(_size = 1.0):
+ set_size(_size)
  y = 0
- x = get_scaled_size_x() // 2 - 1
+ x = size // 2 - 1
  to(y, x)
- return 0 
+ return 0
 
 def x(distance):
  if (distance > 0):
@@ -48,7 +40,7 @@ def reset_y():
  d = -get_pos_y()
  y(d)
  return d
- 
+
 def reset():
  reset_y()
  reset_x()
@@ -57,26 +49,26 @@ def next():
  global next_dx
  next_x = get_pos_x() + next_dx
  next_y = get_pos_y()
- scaled_size_x_div2 = get_scaled_size_x() // 2
- 
+ scaled_size_x_div2 = size // 2
+
  # 左半面の場合
  if get_pos_x() < scaled_size_x_div2:
   if next_x < 0:
    next_x = 0
    next_y = next_y + 1
    next_dx = -next_dx
-  elif next_x >= get_scaled_size_x() // 2 and next_y < get_scaled_size_y() - 1:
+  elif next_x >= size() // 2 and next_y < size() - 1:
    next_x = scaled_size_x_div2 - 1
    next_y = next_y + 1
    next_dx = -next_dx
 
  # 右半面の場合
  else:
-  if next_x >= get_scaled_size_x():
-   next_x = get_scaled_size_x() - 1
+  if next_x >= size:
+   next_x = size - 1
    next_y = next_y - 1
    next_dx = -next_dx
-  elif next_x <= get_scaled_size_x() // 2 - 1 and next_y != 0:
+  elif next_x <= size // 2 - 1 and next_y != 0:
    next_x = scaled_size_x_div2
    next_y = next_y - 1
    next_dx = -next_dx
@@ -88,4 +80,4 @@ def to(_y, _x):
  x(_x - get_pos_x())
 
 def end():
- to(get_scaled_size_y() - 1, get_scaled_size_x() - 1)
+ to(size - 1, size() - 1)

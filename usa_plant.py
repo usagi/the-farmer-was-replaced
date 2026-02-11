@@ -1,6 +1,7 @@
 # Global Variables
 global entity
 global watering
+global fertilizer
 
 # Local Variables
 water_ground_max = 1.00
@@ -17,9 +18,14 @@ def set_watring(_watering):
  global watering
  watering = _watering
 
+def set_fertilizer(_fertilizer):
+ global fertilizer
+ fertilizer = _fertilizer
+
 def invoke():
  global entity
  global watering
+ global fertilizer
 
  if entity == Entities.Tree:
   plant_chessboard(Entities.Tree, Entities.Bush)
@@ -30,6 +36,9 @@ def invoke():
 
  elif entity == Entities.Pumpkin:
   plant_with_till(Entities.Pumpkin)
+  
+ elif entity == Entities.Cactus:
+  plant_with_till(Entities.Cactus)
   
  elif entity == Entities.Sunflower:
   plant_with_till(Entities.Sunflower)
@@ -44,9 +53,12 @@ def invoke():
 
  if watering and get_water() < water_delta:
   use_item(Items.Water)
+ if fertilizer:
+  use_item(Items.Fertilizer)
 
 def till_for(entity):
- if util.includes(entity, [Entities.Carrot, Entities.Pumpkin, Entities.Sunflower]):
+ soils = [Entities.Carrot, Entities.Pumpkin, Entities.Sunflower, Entities.Cactus]
+ if util.includes(entity, soils):
   if get_ground_type() == Grounds.Grassland:
    till()
  elif get_ground_type() == Grounds.Soil:
