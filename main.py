@@ -33,6 +33,7 @@ while True:
   def plant_with_move():
    usa_plant.invoke()
    if current_entity == Entities.Treasure:
+    harvest_candidates[0].append(util.get_pos())
     return True
    elif get_entity_type() == Entities.Sunflower:
     priority = measure()
@@ -54,13 +55,8 @@ while True:
     for pos in prioritied_candidates:
      usa_move.to(pos[0], pos[1])
      only_simulate = current_entity == Entities.Pumpkin and num_harvest_required > 1
-     #if not only_simulate and current_entity == Entities.Pumpkin:
-     # do_a_flip()
      if usa_harvest.invoke(only_simulate):
       num_harvest_required = num_harvest_required - 1
      else:
       harvest_retries[0].append(util.get_pos())
    harvest_candidates = harvest_retries
- #usa_plant.plant_with_till(Entities.Bush)
- #use_item(Items.Weird_Substance, 1 * 2 ** (num_unlocked(Unlocks.Mazes) - 1))
- #harvest()

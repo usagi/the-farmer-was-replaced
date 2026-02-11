@@ -1,1 +1,2 @@
-harvest()
+move(North)
+#print(measure())

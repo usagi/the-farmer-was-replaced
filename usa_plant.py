@@ -27,7 +27,7 @@ def set_watring(_watering):
 def set_fertilizer(_fertilizer):
  global fertilizer
  fertilizer = _fertilizer
-
+  
 def invoke():
  global entity
  global size
@@ -53,12 +53,12 @@ def invoke():
   if get_entity_type() != Entities.Grass:
     plant_with_till(entity)
   harvest()
-  
+
  elif entity == Entities.Treasure:
   usa_move.to(0, 0)
   plant_with_till(Entities.Bush)
-  use_item(Items.Weird_Substance, size ** (num_unlocked(Unlocks.Mazes) - 1))
-
+  use_item(Items.Weird_Substance, size * 2 ** (num_unlocked(Unlocks.Mazes) - 1))
+   
  else:
   print("Warning: Unsupported `entity`")
 
