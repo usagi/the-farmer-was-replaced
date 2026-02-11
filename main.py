@@ -12,6 +12,7 @@ while True:
   current_sequence = params.sequence[sequence_index]
   current_entity = current_sequence[params.SEQUENCE_INDEX_ENTITY]
   usa_plant.set_entity(current_entity)
+  usa_plant.set_size(current_sequence[params.SEQUENCE_INDEX_SIZE])
   usa_plant.set_watring(current_sequence[params.SEQUENCE_INDEX_WATER])
   usa_plant.set_fertilizer(current_sequence[params.SEQUENCE_INDEX_FERTILIZER])
   usa_harvest.set_entity(current_entity)
@@ -31,14 +32,16 @@ while True:
   harvest_candidates_index_top = 15
   def plant_with_move():
    usa_plant.invoke()
-   if get_entity_type() == Entities.Sunflower:
+   if current_entity == Entities.Treasure:
+    return True
+   elif get_entity_type() == Entities.Sunflower:
     priority = measure()
    else:
     priority = harvest_candidates_index_top
    index = harvest_candidates_index_top - priority
    harvest_candidates[index].append(util.get_pos())
    usa_move.next()
-   return get_pos_y() == 0 and get_pos_x() == usa_move.get_scaled_size_x() // 2 - 1
+   return get_pos_y() == 0 and get_pos_x() == current_size // 2 - 1
   if current_entity == Entities.Grass:
    clear()
   util.until(plant_with_move)
@@ -58,3 +61,6 @@ while True:
      else:
       harvest_retries[0].append(util.get_pos())
    harvest_candidates = harvest_retries
+ #usa_plant.plant_with_till(Entities.Bush)
+ #use_item(Items.Weird_Substance, 1 * 2 ** (num_unlocked(Unlocks.Mazes) - 1))
+ #harvest()

@@ -1,5 +1,6 @@
 # Global Variables
 global entity
+global size
 global watering
 global fertilizer
 
@@ -9,10 +10,15 @@ water_bucket_max = 0.25
 water_delta = water_ground_max - water_bucket_max
 
 import(util)
+import(usa_move)
 
 def set_entity(_entity):
  global entity
  entity = _entity
+
+def set_size(_size):
+ global size
+ size = _size
 
 def set_watring(_watering):
  global watering
@@ -24,6 +30,7 @@ def set_fertilizer(_fertilizer):
 
 def invoke():
  global entity
+ global size
  global watering
  global fertilizer
 
@@ -32,7 +39,6 @@ def invoke():
 
  elif entity == Entities.Carrot:
   plant_with_till(Entities.Carrot)
-  #plant_chessboard(Entities.Carrot, Entities.Tree)
 
  elif entity == Entities.Pumpkin:
   plant_with_till(Entities.Pumpkin)
@@ -47,6 +53,11 @@ def invoke():
   if get_entity_type() != Entities.Grass:
     plant_with_till(entity)
   harvest()
+  
+ elif entity == Entities.Treasure:
+  usa_move.to(0, 0)
+  plant_with_till(Entities.Bush)
+  use_item(Items.Weird_Substance, size ** (num_unlocked(Unlocks.Mazes) - 1))
 
  else:
   print("Warning: Unsupported `entity`")

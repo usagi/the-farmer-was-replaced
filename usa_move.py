@@ -47,6 +47,7 @@ def reset():
 
 def next():
  global next_dx
+ global size
  next_x = get_pos_x() + next_dx
  next_y = get_pos_y()
  scaled_size_x_div2 = size // 2
@@ -57,7 +58,7 @@ def next():
    next_x = 0
    next_y = next_y + 1
    next_dx = -next_dx
-  elif next_x >= size() // 2 and next_y < size() - 1:
+  elif next_x >= size // 2 and next_y < size - 1:
    next_x = scaled_size_x_div2 - 1
    next_y = next_y + 1
    next_dx = -next_dx
